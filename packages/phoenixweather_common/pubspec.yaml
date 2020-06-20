@@ -1,0 +1,13 @@
+name: phoenixweather_common
+description: part of program, that can be reused in dart frameworks
+author: bgoncharuck
+licence: LGPL v3
+version: 0.1.0+1
+
+environment:
+  sdk: ">=2.6.0 <3.0.0"
+
+dependencies:
+  meta: ^1.1.8
+  equatable: ^1.2.0
+  http: ^0.12.1

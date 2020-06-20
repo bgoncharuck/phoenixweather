@@ -1,0 +1,18 @@
+name: phoenixweather_database_common
+description: runtime database for phoenixweather
+author: bgoncharuck
+licence: LGPL v3
+version: 0.1.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  meta: ^1.1.8
+  equatable: ^1.2.0
+  
+  phoenixweather_common:
+    path: ../phoenixweather_common
+
+  phoenixweather_bloc_common:
+    path: ../phoenixweather_bloc_common
