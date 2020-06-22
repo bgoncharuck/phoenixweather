@@ -9,17 +9,19 @@ void main() {
 }
 
 Future testAll() async {
+  final runtimeDatabase= RuntimeDatabase();
   final location= await locationClient.getByCityName(city: "Lviv");
   final weather= CurrentData.fromOW(await weatherClient.getByLocation(location: location));
 
-  addLocation(location);
-  addWeather(location: location, data: weather);
+  runtimeDatabase.addLocation(location);
+  runtimeDatabase.addWeather(location: location, data: weather);
 
-  final initJson= toStorageJson();
-  fromStorageJson(json.decode(json.encode(initJson)));
-  final decodedJson= toStorageJson();
+  final initJson= runtimeDatabase.toNetworkJson();
+  runtimeDatabase.fromNetworkJson(json.decode(json.encode(initJson)));
+  final decodedJson= runtimeDatabase.toNetworkJson();
   
   final fromInit=((initJson['locations'])['names'])[0].toString() ;
   final fromDecoded=((decodedJson['locations'])['names'])[0].toString();
   assert(fromInit == fromDecoded, "$fromInit|$fromDecoded");
+  print("$fromInit|$fromDecoded");
 }

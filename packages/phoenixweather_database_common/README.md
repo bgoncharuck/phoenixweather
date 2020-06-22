@@ -5,8 +5,8 @@
 - Also transfer it between storage and server.
 
 ```
-import 'package:phoenixweather_database_common/phoenixweather_database_common.dart' 
-as runtimeDatabase;
+import 'package:phoenixweather_database_common/phoenixweather_database_common.dart';
+final runtimeDatabase= RuntimeDatabase();
 
 runtimeDatabase.cleanOldWeather();
 runtimeDatabase.addLocation(location);

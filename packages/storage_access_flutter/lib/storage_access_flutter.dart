@@ -24,4 +24,3 @@ Future<String> read({@required String fromFile}) async {
     return null;
   }
 }
-

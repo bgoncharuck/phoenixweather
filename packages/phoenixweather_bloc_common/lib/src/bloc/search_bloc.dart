@@ -26,7 +26,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         
         // Main stuff of location/weather search is going on here
         try {
-
+    
           // get location
           final locationModel= await locationClient.getByCityName(city: locationString);
 

@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
   meta: ^1.1.8
   path_provider: ^1.6.7
-  permission_handler: ^5.0.0+hotfix.5
+  permission_handler: 5.0.0+hotfix.5
 
 dev_dependencies:
   flutter_test:
