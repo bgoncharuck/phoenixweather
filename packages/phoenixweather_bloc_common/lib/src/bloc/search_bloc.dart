@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -6,8 +7,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../models/currentdata.dart';
 
-// APIs to make search and get result
 import 'package:phoenixweather_common/phoenixweather_common.dart';
+import 'package:phoenixweather_database_common/phoenixweather_database_common.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -17,6 +18,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Stream<SearchState> mapEventToState(
     SearchEvent event,
   ) async* {
+    
+    if (await noInternetConection()) {
+      if (previousData != null && previousLocation != null)
+        yield SearchStatePrevious(
+            location: previousLocation,
+            data: previousData
+        );
+      else yield SearchStateError("No internet connection");
+    }
+
     if (event is SearchEventLocationEdited) {
       final String locationString= event.text;
       if (locationString.isEmpty) yield this.initialState;      
@@ -28,7 +39,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         try {
     
           // get location
-          final locationModel= await locationClient.getByCityName(city: locationString);
+          final locationModel= await localLocationClient.getByCityName(city: locationString);
 
           // if location model is null for some reason show initial state
           if (locationModel == null) yield this.initialState;
@@ -39,29 +50,29 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             } else if (locationModel.data.contains(wrongGoogleApiKeyError)) {
               yield SearchStateWrongGoogleCodingApiKey();
             } else yield SearchStateError(locationModel.data);
+          } else {
+
+            // get weather
+            final openWeatherModel= await localWeatherClient.getByLocation(location: locationModel);
+            if (openWeatherModel == null) 
+              yield SearchStateError("Error: OpenWeather Server is unavaible or your API key is wrong.");
+
+            final currentData= CurrentData.fromOW(openWeatherModel);
+            if (currentData == null) 
+              yield SearchStateError("Error: can't convert OpenWeatherModel to data");
+
+            // IF ALL OKAY
+            previousData= currentData;
+            previousLocation= locationModel;
+            if (database != null) database.addWeather(
+              location: locationModel,
+              data: currentData
+            );
+            yield SearchStateSuccess(
+              location: locationModel, 
+              data: currentData
+            );
           }
-
-          // get weather
-          final openWeatherModel= await weatherClient.getByLocation(location: locationModel);
-          if (openWeatherModel == null) 
-            yield SearchStateError("Error: OpenWeather Server is unavaible or your API key is wrong.");
-
-          final currentData= CurrentData.fromOW(openWeatherModel);
-          if (currentData == null) 
-            yield SearchStateError("Error: can't convert OpenWeatherModel to data");
-
-          // IF ALL OKAY
-          previousData= currentData;
-          previousLocation= locationModel;
-          if (addToDatabase != null) addToDatabase(
-            location: locationModel,
-            data: currentData
-          );
-          yield SearchStateSuccess(
-            location: locationModel, 
-            data: currentData
-          );
-
         } catch (error) {
           yield SearchStateError(error.toString());
         }
@@ -70,26 +81,29 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       yield SearchStateLoading();
       try {
+          if (previousLocation == null)
+            yield SearchStateEmpty();
+          else {
+            // update weather
+            final openWeatherModel= await localWeatherClient.getByLocation(location: previousLocation);
+            if (openWeatherModel == null) 
+              yield this.initialState;
 
-        // update weather
-        final openWeatherModel= await weatherClient.getByLocation(location: previousLocation);
-        if (openWeatherModel == null) 
-          yield this.initialState;
+            final currentData= CurrentData.fromOW(openWeatherModel);
+            if (currentData == null) 
+              yield this.initialState;
 
-        final currentData= CurrentData.fromOW(openWeatherModel);
-        if (currentData == null) 
-          yield this.initialState;
-
-        // IF ALL OKAY
-        previousData= currentData;
-        if (addToDatabase != null) addToDatabase(
-            location: previousLocation,
-            data: currentData
-        );
-        yield SearchStateSuccess(
-          location: previousLocation, 
-          data: currentData
-        );
+            // IF ALL OKAY
+            previousData= currentData;
+            if (database != null) database.addWeather(
+                location: previousLocation,
+                data: currentData
+            );
+            yield SearchStateSuccess(
+              location: previousLocation, 
+              data: currentData
+            );
+        }
 
       } catch (error) {
         yield this.initialState;
@@ -98,17 +112,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   // --------------------------------------------------------------------------------------------------------------------------
-  Future<bool> Function({
-  @required ILatLonApiModel location, 
-  @required CurrentData data
-  }) addToDatabase;
-  CurrentData previousData;
-  ILatLonApiModel previousLocation;
-  SearchBloc({
-    this.previousData= null,
-    this.previousLocation= null,
-    this.addToDatabase= null
-  });
+ILatLonApiClient localLocationClient;
+IOpenWeatherAPIClient localWeatherClient;
+RuntimeDatabase database;
+CurrentData previousData;
+ILatLonApiModel previousLocation;
+ SearchBloc({
+    this.previousData,
+    this.previousLocation,
+    this.localLocationClient,
+    this.localWeatherClient,
+    this.database,
+  }) {
+    localLocationClient= (localLocationClient != null) ? localLocationClient : locationClient;
+    localWeatherClient= (localWeatherClient != null) ? localWeatherClient : weatherClient;
+  }
 
   @override
   SearchState get initialState {
@@ -128,13 +146,23 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     Stream<SearchEvent> events,
     Stream<Transition<SearchEvent, SearchState>> Function (SearchEvent event) transition
   ) => events
-  .debounceTime(Duration(seconds: 1))
+  .debounceTime(Duration(microseconds: 400))
   .switchMap(transition);
 
   @override
   void onTransition(Transition<SearchEvent, SearchState> transition) {
     // @DEBUG
-    // print(transition);
+    // print(database.locations.byName.length);
     super.onTransition(transition);
   }
+}
+
+Future<bool> noInternetConection() async {
+  try {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      return false;
+    }
+  } catch (_) {}
+  return true;
 }

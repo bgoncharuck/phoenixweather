@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:phoenixweather_flutter_app/constants.dart';
-import 'package:phoenixweather_flutter_app/components/search_bar.dart';
-import 'package:phoenixweather_flutter_app/components/update_button.dart';
-import 'package:phoenixweather_flutter_app/components/login_button.dart';
+
+import 'search_bar.dart';
+import 'update_button.dart';
+import 'login_button.dart';
+import 'essential.dart';
 
 class PhoenixWeatherHome extends StatelessWidget {
-  const PhoenixWeatherHome({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final theme= context.watch<IDefaultTheme>();
@@ -25,8 +25,9 @@ class PhoenixWeatherHome extends StatelessWidget {
       ),
       body: SafeArea(
 
-       child: SizedBox(),
-
+      // essential app part
+       child: Essential(),
+       
        ), 
     );
   }

@@ -1,9 +1,12 @@
 part of 'show_bloc.dart';
 
 abstract class ShowState extends Equatable {
+  int get day=> null;
+  List<WeatherModel> get items=> null;
+  WeatherModel get item=> null;
   const ShowState();
   @override
-  List<Object> get props => [];
+  List<Object> get props => [day, items, item];
 }
 
 class ShowStateLoading extends ShowState {}
@@ -11,6 +14,8 @@ class ShowStateLoading extends ShowState {}
 class ShowStateDay extends ShowState {
   final int day;
   final List<WeatherModel> items;
+  @override
+  WeatherModel get item=> items[0];
 
   ShowStateDay({
     @required this.day,

@@ -68,9 +68,39 @@ class RuntimeDatabase {
     return true;
   }
 
-  // @TODO
+  CurrentData anyWeather() {
+    if (weathers.byLatLonFrom.isEmpty) return null;
+    return weathers.byLatLonFrom.values.elementAt(0).dataByDate.values.elementAt(0);
+  }
+
+  ILatLonApiModel anyLocation() {
+    if (locations.byName.isEmpty) return null;
+    return locations.byName.values.elementAt(0);
+  }
+
   // cleans all but the newest weather data for every local location:weather
   Future<bool> cleanOldWeather() async {
+    try {
+      if (weathers.byLatLonFrom.values.length> 0) {
+          for (var dateWeather in weathers.byLatLonFrom.values) {
+          if (dateWeather.dataByDate.values.length > 1) {
+
+            int newestDate= dateWeather.dataByDate.values.reduce(
+              (curr, next) => curr.dt >= next.dt ? curr: next
+            ).dt;
+
+            for (var data in dateWeather.dataByDate.values) {
+              if (data.dt < newestDate) 
+                dateWeather.dataByDate.remove(data.dt);
+            }
+          }
+        }
+        return true;
+      }
+    } catch(nullException) {
+      print("Nothing to clean.");
+    }
+
     return false;
   }
 

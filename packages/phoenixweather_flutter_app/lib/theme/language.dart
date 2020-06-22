@@ -1,8 +1,5 @@
 import 'dart:io' show Platform;
 
-// @TODO
-// use dart-style localization and delete this file
-
 abstract class ILanguageSetting {
   String get errorLabel;
   String get errorFilesPermission;

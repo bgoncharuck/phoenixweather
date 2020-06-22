@@ -71,6 +71,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0+1"
+  phoenixweather_database_common:
+    dependency: "direct main"
+    description:
+      path: "../phoenixweather_database_common"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   rxdart:
     dependency: "direct main"
     description:

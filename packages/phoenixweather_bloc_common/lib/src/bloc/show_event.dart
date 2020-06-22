@@ -16,12 +16,15 @@ class ShowItemEvent extends ShowEvent {
 } // One Item
 
 class ShowDayEvent extends ShowEvent {
+  final innerEvent;
+  final CurrentData data;
   final int day;
   final List<WeatherModel> items= [];
 
   ShowDayEvent({
-    @required CurrentData data,
-    @required day
+    @required this.data,
+    @required day,
+    this.innerEvent= false,
   }) : this.day= 
     // days must be 1-7
   (day > 0 && day <= 7) ? day : 

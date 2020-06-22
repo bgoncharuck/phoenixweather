@@ -7,8 +7,10 @@ class PhoenixWeatherLoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body:  PhoenixWeatherLoading(),
+    return SafeArea(
+      child: Scaffold(
+        body:  PhoenixWeatherLoading(),
+      ),
     );
   }
 }
@@ -19,26 +21,24 @@ class PhoenixWeatherLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme= context.watch<IDefaultTheme>();
-    return SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SpinKitFoldingCube(
-            color: theme.accent,
-            size: 128,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "Phoenix Weather is loading.",
-              style: TextStyle(
-                color: theme.mainColor,
-                fontSize: 20,
-              ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        SpinKitFoldingCube(
+          color: theme.accent,
+          size: 128,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            "Phoenix Weather is loading.",
+            style: TextStyle(
+              color: theme.mainColor,
+              fontSize: 20,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -15,3 +15,6 @@ dependencies:
   
   phoenixweather_common:
     path: ../phoenixweather_common
+
+  phoenixweather_database_common:
+    path: ../phoenixweather_database_common

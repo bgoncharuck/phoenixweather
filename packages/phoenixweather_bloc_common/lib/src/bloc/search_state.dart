@@ -2,8 +2,10 @@ part of 'search_bloc.dart';
 
 abstract class SearchState extends Equatable {
   const SearchState();
+  CurrentData get data=> null;
+  String get errorText=> "";
   @override
-  List<Object> get props => [];
+  List<Object> get props => [data, errorText];
 }
 
 // init states
@@ -18,7 +20,7 @@ class SearchStatePrevious extends SearchState{
   });
 
   @override
-  List<Object> get props => [data];
+  List<Object> get props => [location, data];
   @override
   bool get stringify => true;
 }

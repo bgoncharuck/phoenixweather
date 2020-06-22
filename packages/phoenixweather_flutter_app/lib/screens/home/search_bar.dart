@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:phoenixweather_common/phoenixweather_common.dart';
 import 'package:phoenixweather_database_common/phoenixweather_database_common.dart';
 import 'package:phoenixweather_flutter_app/constants.dart';
 
@@ -11,18 +10,18 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  final _textController = TextEditingController();
 
+  TextEditingController _textController;
   RuntimeDatabase _database;
   SearchBloc _searchBloc;
-  IDefaultTheme theme;
+  IDefaultTheme _theme;
 
 @override
   void initState() {
     super.initState();
     _database= context.read<RuntimeDatabase>();
     _searchBloc= context.bloc<SearchBloc>();
-    theme= context.read<IDefaultTheme>();
+    _theme= context.read<IDefaultTheme>();
 
     if (_database.user != null && _database.user.home != null) {
       _searchBloc.previousLocation= _database.searchLocation(_database.user.home);
@@ -37,6 +36,11 @@ class _SearchBarState extends State<SearchBar> {
       if (result != null)
       _searchBloc.previousData= result;
     }
+
+    _textController = TextEditingController(
+        text: (_searchBloc.previousLocation != null) ?
+            _searchBloc.previousLocation.data: ''
+      );
   }
 
  @override
@@ -45,18 +49,19 @@ class _SearchBarState extends State<SearchBar> {
     return TextField(
       controller: _textController,
       autocorrect: false,
-      onChanged: (text) {
-        _searchBloc.add(
-          SearchEventLocationEdited(text: text),
-        );
+      onEditingComplete: () {
+        setState(() {
+            _searchBloc.add(
+            SearchEventLocationEdited(text: _textController.text),
+          );
+          FocusScope.of(context).unfocus();
+        });
       },
       decoration: InputDecoration(
         border: InputBorder.none,
-        hintText: (_searchBloc.previousLocation != null) ?
-        _searchBloc.previousLocation.data: '',
       ),
       style: TextStyle(
-        color: theme.onMainColor,
+        color: _theme.onMainColor,
       ),
     );
   }

@@ -22,8 +22,8 @@ const wrongLocationName= "Wrong Location Name.";
 abstract class ILatLonApiClient {
 
   IGetRequestByApiKey client;
-  Future<ILatLonApiModel> Function(String location) searchInDatabase;
-  Future<bool> Function(ILatLonApiModel locationModel) addToDatabase;
+  ILatLonApiModel Function(String location) searchInDatabase;
+  bool Function(ILatLonApiModel locationModel) addToDatabase;
 
   Future<ILatLonApiModel> getByCityName ({@required String city});
   /*
@@ -50,8 +50,8 @@ class GoogleGeocoding implements ILatLonApiClient {
     apiKey: privateGoogleApiKey, 
     baseUrl: "https://maps.googleapis.com/maps/api/geocode/json",
   );
-  Future<ILatLonApiModel> Function(String location) searchInDatabase= null;
-  Future<bool> Function(ILatLonApiModel locationModel) addToDatabase= null;
+  ILatLonApiModel Function(String location) searchInDatabase= null;
+  bool Function(ILatLonApiModel locationModel) addToDatabase= null;
 
   ErrorLatLonApiModel onError({@required text}) {
     // @DEBUG
@@ -63,7 +63,7 @@ class GoogleGeocoding implements ILatLonApiClient {
 
     // If location is already saved
     if (searchInDatabase != null) {
-      final ILatLonApiModel fromDatabase= await searchInDatabase(city);
+      final ILatLonApiModel fromDatabase= searchInDatabase(city);
       if(fromDatabase != null) return fromDatabase;
     }
 
