@@ -8,6 +8,10 @@ abstract class IDefaultTheme {
   Color label;
   Color accent;
   Color onAccent;
+  Color weatherDayBackground;
+  Color weatherNightBackground;
+  Color weatherDayText;
+  Color weatherNightText;
 }
 
 class IndigoOrangeTheme implements IDefaultTheme {
@@ -18,6 +22,10 @@ class IndigoOrangeTheme implements IDefaultTheme {
   Color label = Colors.grey[500];
   Color accent = Colors.deepOrange;
   Color onAccent = Colors.white;
+  Color weatherDayBackground= Colors.white;
+  Color weatherNightBackground= Colors.indigo[400] ;
+  Color weatherDayText= Colors.indigo[900];
+  Color weatherNightText= Colors.white;
 }
 
 ThemeData lightThemeData(IDefaultTheme defaultTheme) => ThemeData(

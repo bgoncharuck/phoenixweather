@@ -5,9 +5,15 @@ abstract class ShowEvent extends Equatable {
 }
 
 class ShowItemEvent extends ShowEvent {
-
   final WeatherModel item;
-  ShowItemEvent({@required this.item});
+  final int day;
+  final int index;
+
+  ShowItemEvent({
+    @required this.item,
+    @required this.day,
+    @required this.index,
+  });
 
   @override
   List<Object> get props => [item];
@@ -20,6 +26,7 @@ class ShowDayEvent extends ShowEvent {
   final CurrentData data;
   final int day;
   final List<WeatherModel> items= [];
+  
 
   ShowDayEvent({
     @required this.data,

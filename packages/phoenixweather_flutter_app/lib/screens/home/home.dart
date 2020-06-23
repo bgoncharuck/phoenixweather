@@ -4,7 +4,7 @@ import 'package:phoenixweather_flutter_app/constants.dart';
 import 'search_bar.dart';
 import 'update_button.dart';
 import 'login_button.dart';
-import 'essential.dart';
+import 'home_body.dart';
 
 class PhoenixWeatherHome extends StatelessWidget {
   @override
@@ -26,7 +26,7 @@ class PhoenixWeatherHome extends StatelessWidget {
       body: SafeArea(
 
       // essential app part
-       child: Essential(),
+       child: HomeBody(),
        
        ), 
     );

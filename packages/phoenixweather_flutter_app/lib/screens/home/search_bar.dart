@@ -62,6 +62,7 @@ class _SearchBarState extends State<SearchBar> {
       ),
       style: TextStyle(
         color: _theme.onMainColor,
+        decoration: TextDecoration.none,
       ),
     );
   }

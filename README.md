@@ -2,7 +2,9 @@
 `...actually, reusable modules and an app! What a treasure!`
 
 # For Users
-Lorem ipsum zyiv kapustu
+<img width="282px" height="501px" src="repo_assets/weather_in_kyiv.png" />
+<img width="282px" height="501px" src="repo_assets/weather_in_munchen.png" />
+<img width="282px" height="501px" src="repo_assets/weather_in_lviv.png" />
 
 # For Developers
 ### Version: 0.1.0
