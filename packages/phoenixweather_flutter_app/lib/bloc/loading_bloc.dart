@@ -6,7 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:phoenixweather_flutter_app/services/permissions.dart';
 import 'package:phoenixweather_flutter_app/services/loadlocalfiles.dart';
+import 'package:phoenixweather_flutter_app/services/firebase_load.dart';
 import 'package:phoenixweather_database_common/phoenixweather_database_common.dart';
+
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -28,12 +30,13 @@ Future syncFiles({
       bool noInternet= await checkIfNoInternetConection();
 
       // load locations from internet
-      
+      if (noInternet == false)
+        database.acceptAsyncNoWaiting(LoadLocationsFromFirebase());
 
       // load local files
       await loadFiles(
         database: database,
-        noInternet: true, 
+        noInternet: noInternet, 
       );
 
       // clean old weather

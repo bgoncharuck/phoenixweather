@@ -52,6 +52,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             } else yield SearchStateError(locationModel.data);
           } else {
 
+            if (pushLocationModelToServer != null)
+              pushLocationModelToServer(locationModel);
+
             // get weather
             final openWeatherModel= await localWeatherClient.getByLocation(location: locationModel);
             if (openWeatherModel == null) 
@@ -126,6 +129,7 @@ RuntimeDatabase database;
 CurrentData previousData;
 ILatLonApiModel previousLocation;
 AsyncRuntimeDatabaseVisitor writeRecords;
+Future<void> Function(ILatLonApiModel model) pushLocationModelToServer;
  SearchBloc({
     this.previousData,
     this.previousLocation,
@@ -133,6 +137,7 @@ AsyncRuntimeDatabaseVisitor writeRecords;
     this.localWeatherClient,
     this.database,
     this.writeRecords,
+    this.pushLocationModelToServer,
   }) {
     localLocationClient= (localLocationClient != null) ? localLocationClient : locationClient;
     localWeatherClient= (localWeatherClient != null) ? localWeatherClient : weatherClient;

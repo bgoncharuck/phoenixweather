@@ -6,6 +6,7 @@ import 'package:phoenixweather_flutter_app/screens/loading.dart';
 import 'package:phoenixweather_flutter_app/screens/home/home.dart';
 import 'package:phoenixweather_flutter_app/screens/login/login.dart';
 import 'package:phoenixweather_flutter_app/services/writelocalfiles.dart';
+import 'package:phoenixweather_flutter_app/services/firebase_add.dart';
 
 class AppWorking extends StatelessWidget {
   @override
@@ -40,6 +41,8 @@ class AppWorking extends StatelessWidget {
     searchBloc.database= database;
     // add visitor to write database to local files
     searchBloc.writeRecords= SaveLocalFiles();
+    // add method to load location models to server
+    searchBloc.pushLocationModelToServer= addModelToFireStore;
 
     return  MaterialApp(
       title: 'ExampleApp',

@@ -1,11 +1,38 @@
-import 'dart:convert';
-
-import 'package:phoenixweather_database_common/phoenixweather_database_common.dart';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:phoenixweather_common/phoenixweather_common.dart';
 
-class AddLocationToFirebase implements AsyncRuntimeDatabaseVisitor {
-  @override
-  Future<bool> visit(RuntimeDatabase database) async {
-    
+Future<void> addModelToFireStore(ILatLonApiModel model) async {
+  if (await checkInternetConection()) {
+    Firestore.instance
+    .collection('locations')
+    .document('0PIFW0DUCaCyEV4G4J32')
+    .updateData({
+      'models':FieldValue.arrayUnion([{
+        'data': model.data,
+        'lat': model.lat,
+        'lon': model.lon
+        }
+      ])
+    });
+
+    Firestore.instance
+    .collection('locations')
+    .document('0PIFW0DUCaCyEV4G4J32')
+    .updateData({
+      'names':FieldValue.arrayUnion(
+        [model.data]
+      )
+    });
   }
+}
+
+Future<bool> checkInternetConection() async {
+  try {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      return true;
+    }
+  } catch (_) {}
+  return false;
 }
