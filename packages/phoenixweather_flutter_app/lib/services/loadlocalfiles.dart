@@ -5,6 +5,8 @@ import 'package:phoenixweather_database_common/phoenixweather_database_common.da
 import 'package:storage_access_flutter/storage_access_flutter.dart' as storage;
 import 'package:phoenixweather_flutter_app/constants.dart';
 
+// old implementation without visitor, but it just works.
+
 Future<bool> loadFiles({
   @required RuntimeDatabase database,
   @required bool noInternet

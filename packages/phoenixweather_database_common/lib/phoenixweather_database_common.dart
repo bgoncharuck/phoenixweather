@@ -6,6 +6,31 @@ part 'src/user.dart';
 part 'src/locations.dart';
 part 'src/weathers.dart';
 
+abstract class RuntimeDatabaseVisitor {
+  bool visit(RuntimeDatabase database);
+}
+abstract class AsyncRuntimeDatabaseVisitor {
+  Future<bool> visit(RuntimeDatabase database);
+}
+
+class MultiRuntimeDatabaseVisitor implements RuntimeDatabaseVisitor {
+  List<RuntimeDatabaseVisitor> visitors;
+  @override
+  bool visit(RuntimeDatabase database) {
+    final results= visitors.map((visitor) => visitor.visit(database));
+    return results.any((result) => false) ? false : true;
+  }
+}
+
+class MultiAsyncRuntimeDatabaseVisitor implements AsyncRuntimeDatabaseVisitor {
+  List<AsyncRuntimeDatabaseVisitor> visitors;
+  @override
+  Future<bool> visit(RuntimeDatabase database) async {
+    final results= await visitors.map((visitor) async => await visitor.visit(database));
+    return results.any((result) => false) ? false : true;
+  }
+}
+
 class RuntimeDatabase {
 
   // singleton
@@ -22,16 +47,16 @@ class RuntimeDatabase {
 
   bool accept(RuntimeDatabaseVisitor visitor) => visitor.visit(this);
   Future<bool> acceptAsync(AsyncRuntimeDatabaseVisitor visitor) async => await visitor.visit(this);
-   Future<bool> acceptAsyncNoWaiting(AsyncRuntimeDatabaseVisitor visitor) async => visitor.visit(this);
+  Future<bool> acceptAsyncNoWaiting(AsyncRuntimeDatabaseVisitor visitor) async => visitor.visit(this);
 
   // Must be edited manually outside of base
-  // It exists here because for local save/load purpose
+  // It exists here for local save/load purpose
   User user;
 
   ILocations locations;
   IWeathers weathers;
 
- ILatLonApiModel searchLocation(String location)  
+  ILatLonApiModel searchLocation(String location)  
   => locations.byName[location];
 
 
@@ -46,17 +71,17 @@ class RuntimeDatabase {
     @required String location,
     @required int date,
   })  {
-  CurrentData data= null;
+    
+    CurrentData data= null;
 
-  try {
-      data=  (weathers
-        .byLatLonFrom[locations.byName[location]]
-      ).dataByDate[date]; 
-  } catch(error) {} 
+    try {
+        data=  (weathers
+          .byLatLonFrom[locations.byName[location]]
+        ).dataByDate[date]; 
+    } catch(error) {} 
 
-  return data;
+    return data;
  }
-
 
   bool addWeather({
     @required ILatLonApiModel location, 
@@ -133,12 +158,4 @@ class RuntimeDatabase {
       'weathers': weathers.toJson()
     };
   }
-}
-
-abstract class RuntimeDatabaseVisitor {
-  bool visit(RuntimeDatabase database);
-}
-
-abstract class AsyncRuntimeDatabaseVisitor {
-  Future<bool> visit(RuntimeDatabase database);
 }
