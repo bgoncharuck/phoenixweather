@@ -12,7 +12,7 @@ class _PhoenixWeatherAppState extends State<PhoenixWeatherApp> {
   @override
   void initState() {
     super.initState();
-    loadingFiles(
+    syncFiles(
       bloc: loadingBloc,
       database:  runtimeDatabase
     );

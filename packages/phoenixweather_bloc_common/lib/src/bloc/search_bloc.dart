@@ -64,10 +64,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             // IF ALL OKAY
             previousData= currentData;
             previousLocation= locationModel;
-            if (database != null) database.addWeather(
-              location: locationModel,
-              data: currentData
-            );
+            if (database != null) {
+              await database.addWeather(
+                location: locationModel,
+                data: currentData
+              );
+              if (writeRecords != null)
+                database.acceptAsyncNoWaiting(writeRecords);
+            }
             yield SearchStateSuccess(
               location: locationModel, 
               data: currentData
@@ -95,10 +99,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
             // IF ALL OKAY
             previousData= currentData;
-            if (database != null) database.addWeather(
+            if (database != null) {
+              await database.addWeather(
                 location: previousLocation,
                 data: currentData
-            );
+              );
+              if (writeRecords != null)
+                database.acceptAsyncNoWaiting(writeRecords);
+            }
             yield SearchStateSuccess(
               location: previousLocation, 
               data: currentData
@@ -117,12 +125,14 @@ IOpenWeatherAPIClient localWeatherClient;
 RuntimeDatabase database;
 CurrentData previousData;
 ILatLonApiModel previousLocation;
+AsyncRuntimeDatabaseVisitor writeRecords;
  SearchBloc({
     this.previousData,
     this.previousLocation,
     this.localLocationClient,
     this.localWeatherClient,
     this.database,
+    this.writeRecords,
   }) {
     localLocationClient= (localLocationClient != null) ? localLocationClient : locationClient;
     localWeatherClient= (localWeatherClient != null) ? localWeatherClient : weatherClient;

@@ -5,6 +5,7 @@ import 'package:phoenixweather_flutter_app/screens/error.dart';
 import 'package:phoenixweather_flutter_app/screens/loading.dart';
 import 'package:phoenixweather_flutter_app/screens/home/home.dart';
 import 'package:phoenixweather_flutter_app/screens/login/login.dart';
+import 'package:phoenixweather_flutter_app/services/writelocalfiles.dart';
 
 class AppWorking extends StatelessWidget {
   @override
@@ -37,6 +38,8 @@ class AppWorking extends StatelessWidget {
 
     // add database to search logic
     searchBloc.database= database;
+    // add visitor to write database to local files
+    searchBloc.writeRecords= SaveLocalFiles();
 
     return  MaterialApp(
       title: 'ExampleApp',

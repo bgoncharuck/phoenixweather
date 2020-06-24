@@ -1,5 +1,8 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:phoenixweather_flutter_app/services/permissions.dart';
 import 'package:phoenixweather_flutter_app/services/loadlocalfiles.dart';
@@ -12,7 +15,7 @@ part 'loading_event.dart';
 part 'loading_state.dart';
 
 
-Future loadingFiles({
+Future syncFiles({
   @required RuntimeDatabase database,
   @required LoadingBloc bloc
 }) async {
@@ -21,7 +24,21 @@ Future loadingFiles({
     if (statusOf[Permission.storage].isGranted == false) {
       bloc.add(LoadingErrorEvent());
     } else {    
-      await loadFiles(database);
+
+      bool noInternet= await checkIfNoInternetConection();
+
+      // load locations from internet
+      
+
+      // load local files
+      await loadFiles(
+        database: database,
+        noInternet: true, 
+      );
+
+      // clean old weather
+      await database.cleanOldWeather();
+
       bloc.add(LoadingSuccessEvent());
     }
   }
@@ -39,4 +56,14 @@ class LoadingBloc extends Bloc<LoadingEvent, LoadingState> {
     else if (event is LoadingErrorEvent)
       yield LoadingError();
   }
+}
+
+Future<bool> checkIfNoInternetConection() async {
+  try {
+    final result = await InternetAddress.lookup('google.com');
+    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      return false;
+    }
+  } catch (_) {}
+  return true;
 }
