@@ -15,13 +15,13 @@ runtimeDatabase.addLocation(location);
 await storage.write(
     data: json.encode(
             runtimeDatabase
-            .toStorageJson()),
+            .toWeatherJson()),
 
-    asFile: "phoenixweather_local.json"
+    asFile: "phoenixweather_local_weather.json"
 );
 ```
 
-### > Is it really helps make app faster?
+### > Is it really helps make app much faster?
 - Nope.
 - But it helps to save/load/transfer data correctly.
 - Also, now location models can be shared between all users. And **this** *can* make app faster. If two users searched one location and it was synced between devices.
@@ -29,19 +29,20 @@ await storage.write(
 ### Methods
 -  `ILatLonApiModel` searchLocation(`String` location)  
 -  `bool` addLocation(`ILatLonApiModel `locationModel)
--  `CurrentData` searchWeather({@required `String `location, @required `int` date}
--   `bool `addWeather({@required `ILatLonApiModel `location, @required `CurrentData` data})
+-  `CurrentData` searchWeather({@required `String` location, @required `int` date}
+-   `bool `addWeather({@required `ILatLonApiModel` location, @required `CurrentData` data})
 - `Future<bool>` cleanOldWeather() 
 ### JSON
 - to/fromNetworkJson => {"locations": `Locations`}
-- to/fromStorageJson => {"user": `User` or `null`, "weathers": `Weathers`}
+- to/fromWeatherJson => {"weathers": `Weathers`}
+- to/fromUserJson => {"user": `User`}
 ### Models
 #### Locations
 - `Map<String, ILatLonApiModel> `byName= {};
 - `Map<String, dynamic>` toJson() ;
 - `void `fromJson(`Map<String, dynamic>` json);
 #### Weathers
-- `Map<ILatLonApiModel, DateWeathers>` byLatLonFrom;
+- `Map<String, DateWeathers>` byLocationFrom;
 - `Map<String, dynamic>` toJson();
 - `void` fromJson(`Map<String, dynamic>` json);
 #### DateWeathers
