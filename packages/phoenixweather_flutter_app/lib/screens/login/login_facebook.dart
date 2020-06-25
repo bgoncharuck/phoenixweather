@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:phoenixweather_flutter_app/constants.dart';
+import 'package:phoenixweather_flutter_app/services/firebase_auth.dart';
 
 class LoginFacebookButton extends StatelessWidget {
   @override
@@ -23,8 +25,15 @@ class LoginFacebookButton extends StatelessWidget {
         ],
       ),
     onPressed: () {
-      
+      loginAction(
+        context: context, 
+        serviceLogin: FacebookLogin,
+      );      
     }
     );
   }
+}
+
+Future<String> FacebookLogin(BuildContext context) async {
+
 }

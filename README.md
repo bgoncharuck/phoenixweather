@@ -8,8 +8,16 @@
 <img width="282px" height="501px" src="repo_assets/weather_in_lviv.png" />
 </div>
 
+### 
+
+Simple weather app with home location sync between devices by Google API.
+```
+and by facebook API when their covoid hysteria finally ends.
+```
+
 # For Developers
 ### Version: 0.1.0
+Please, see packages/phoenixweather_flutter_app for developer details.
 #### "Issues"
 - Have you added your API keys before using flutter build? No? Then don't say it not works.
 - See android appbundle in release section, if you don't want to build.

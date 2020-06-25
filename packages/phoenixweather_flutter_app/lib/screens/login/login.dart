@@ -12,7 +12,7 @@ class PhoenixWeatherLoginScreen extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Expanded(child: LoginFacebookButton()),
+                // Expanded(child: LoginFacebookButton()),
                 Expanded(child: LoginGoogleButton()),
               ],
             ),

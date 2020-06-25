@@ -70,7 +70,7 @@ class ShowItemSmall extends StatelessWidget {
                     child: Text(
                       time,
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         color: (isNight) ?
                         theme.weatherNightText :
                         theme.weatherDayText,
@@ -100,7 +100,7 @@ class ShowItemSmall extends StatelessWidget {
                     child: Text(
                       "${(item.temperature-273.15).toStringAsFixed(2)} °C",
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         color: (isNight) ?
                         theme.weatherNightText :
                         theme.weatherDayText,

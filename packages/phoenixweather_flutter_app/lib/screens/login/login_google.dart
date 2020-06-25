@@ -1,26 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:phoenixweather_flutter_app/bloc/loading_bloc.dart';
 import 'package:phoenixweather_flutter_app/constants.dart';
-import 'package:phoenixweather_flutter_app/services/firebase_user.dart';
+import 'package:phoenixweather_flutter_app/services/firebase_auth.dart';
 
 class LoginGoogleButton extends StatelessWidget {
-  void googleSignIn(BuildContext context) {
-    final database= context.read<RuntimeDatabase>();
-    final loadingBloc= context.bloc<LoadingBloc>();
-
-    _handleSignIn(context)
-    .then((String id) async {
-      if (id != "local") {
-        await database.acceptAsync(ChangeUser(id: id));
-        if (database.user.home != null) {
-          loadingBloc.add(LoadingUpdateEvent());
-        }
-      }
-    })
-    .catchError((e) => print(e.toString()));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +27,25 @@ class LoginGoogleButton extends StatelessWidget {
         ],
       ),
     onPressed: () {
-      googleSignIn(context);
+      loginAction(
+        context: context, 
+        serviceLogin: GoogleLogin
+      );
     }
     );
   }
 }
 
-Future<String> _handleSignIn(BuildContext context) async {
+Future<String> GoogleLogin(BuildContext context) async {
   final auth= context.read<FirebaseAuth >();
   final googleSignIn= context.read<GoogleSignIn>();
 
   try {
-    final GoogleSignInAccount googleUser = await googleSignIn.signIn();
+    final GoogleSignInAccount googleUser = await googleSignIn.signIn().catchError(
+      // Will not work in DEBUG mode.
+      // Test it in flutter run
+      (err) {print(err.toString()); return 'local';}
+    ) ;
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
