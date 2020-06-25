@@ -22,3 +22,7 @@ Please, see packages/phoenixweather_flutter_app for developer details.
 - Have you added your API keys before using flutter build? No? Then don't say it not works.
 - See android [appbundle 0.1.0](https://github.com/bgoncharuck/phoenixweather/releases/tag/0.1.1) in release section
 - See play market:
+
+#### Todo
+- fix offline data home location don't change in SearchBloc
+- facebook API, when avaible.
