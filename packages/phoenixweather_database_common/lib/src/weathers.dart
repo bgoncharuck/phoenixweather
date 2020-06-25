@@ -1,23 +1,23 @@
 part of '../phoenixweather_database_common.dart';
 
 abstract class IWeathers {
-  Map<ILatLonApiModel, DateWeathers> byLatLonFrom;
+  Map<String, DateWeathers> byLocationFrom;
   Map<String, dynamic> toJson();
    void fromJson(Map<String, dynamic> json);
 }
 
 class Weathers implements IWeathers {
-  Map<ILatLonApiModel, DateWeathers> byLatLonFrom= {};
+  Map<String, DateWeathers> byLocationFrom= {};
   @override
   Map<String, dynamic> toJson() => {
-    'models': byLatLonFrom.keys.toList(),
-    'datas': byLatLonFrom.values.toList()
+    'models': byLocationFrom.keys.toList(),
+    'datas': byLocationFrom.values.toList()
   };
   @override
   void fromJson(Map<String, dynamic> json) {
-    List<ILatLonApiModel> models= List
+    List<String> models= List
       .from(json['models']
-      .map((model) => DefaultLatLonApiModel.fromJson(model))
+      .map((model) => model.toString())
       .toList());
 
     List<DateWeathers> datas= List
@@ -25,9 +25,9 @@ class Weathers implements IWeathers {
       .map((data) => DateWeathers.fromJson(data))
       .toList());
 
-    byLatLonFrom= {};
+    byLocationFrom= {};
     for(int index=0; index< models.length; index++) {
-      byLatLonFrom[models[index]]= datas[index];
+      byLocationFrom[models[index]]= datas[index];
     }
   }
 }

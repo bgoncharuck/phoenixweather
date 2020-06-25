@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:meta/meta.dart';
 import 'package:phoenixweather_common/phoenixweather_common.dart';
 import 'package:phoenixweather_bloc_common/phoenixweather_bloc_common.dart';
@@ -71,16 +73,7 @@ class RuntimeDatabase {
     @required String location,
     @required int date,
   })  {
-    
-    CurrentData data= null;
-
-    try {
-        data=  (weathers
-          .byLatLonFrom[locations.byName[location]]
-        ).dataByDate[date]; 
-    } catch(error) {} 
-
-    return data;
+    return weathers.byLocationFrom[location].dataByDate[date];
  }
 
   bool addWeather({
@@ -88,17 +81,17 @@ class RuntimeDatabase {
     @required CurrentData data
   }) {
     // if this location already exist, add newer date:data
-    if (weathers.byLatLonFrom[location] != null)
-      (weathers.byLatLonFrom[location]).dataByDate[data.dt]= data;
+    if (weathers.byLocationFrom[location.data] != null)
+      (weathers.byLocationFrom[location.data]).dataByDate[data.dt]= data;
     // else create new
     else 
-      weathers.byLatLonFrom[location]= DateWeathers(data);
+      weathers.byLocationFrom[location.data]= DateWeathers(data);
     return true;
   }
 
   CurrentData anyWeather() {
-    if (weathers.byLatLonFrom.isEmpty) return null;
-    return weathers.byLatLonFrom.values.elementAt(0).dataByDate.values.elementAt(0);
+    if (weathers.byLocationFrom.isEmpty) return null;
+    return weathers.byLocationFrom.values.elementAt(0).dataByDate.values.elementAt(0);
   }
 
   ILatLonApiModel anyLocation() {
@@ -109,8 +102,8 @@ class RuntimeDatabase {
   // cleans all but the newest weather data for every local location:weather
   Future<bool> cleanOldWeather() async {
     try {
-      if (weathers.byLatLonFrom.values.length> 0) {
-          for (var dateWeather in weathers.byLatLonFrom.values) {
+      if (weathers.byLocationFrom.values.length> 0) {
+          for (var dateWeather in weathers.byLocationFrom.values) {
           if (dateWeather.dataByDate.values.length > 1) {
 
             int newestDate= dateWeather.dataByDate.values.reduce(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:meta/meta.dart';
@@ -25,6 +26,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             location: previousLocation,
             data: previousData
         );
+      else if (database != null && database.user.lastUpdate != null) {
+        previousLocation= database.searchLocation(database.user.home);
+        previousData= database.searchWeather(location: database.user.home, date: database.user.lastUpdate);
+        // print(json.encode(database.weathers.toJson()));
+        yield SearchStatePrevious(
+            location: previousLocation,
+            data: previousData
+        );
+      }
       else yield SearchStateError("No internet connection");
     }
 
@@ -84,7 +94,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             );
           }
         } catch (error) {
-          yield SearchStateError(error.toString());
+          print(error.toString());
+          yield initialState;
         }
       }
     } else if (event is SearchEventUpdate) {
@@ -121,7 +132,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         }
 
       } catch (error) {
-        yield this.initialState;
+        print(error.toString());
+        yield initialState;
       }
     }
   }
