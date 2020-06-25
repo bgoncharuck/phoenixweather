@@ -20,3 +20,9 @@ class LoadingSuccess extends LoadingState {
   @override
   List<Object> get props => [done];
 }
+
+class LoadingUpdate extends LoadingState {
+  final update= "update";
+  @override
+  List<Object> get props => [update];
+}

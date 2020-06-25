@@ -65,10 +65,14 @@ ThemeData lightThemeData(IDefaultTheme defaultTheme) => ThemeData(
     trackHeight: 8.0,
   ),
   inputDecorationTheme: InputDecorationTheme(
+
+    floatingLabelBehavior: FloatingLabelBehavior.never,
+    border: UnderlineInputBorder(
+        borderSide: BorderSide(color: defaultTheme.mainColor)),
     disabledBorder:
-        UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[500])),
+        UnderlineInputBorder(borderSide: BorderSide(color: defaultTheme.mainColor)),
     enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: defaultTheme.onBackground)),
+        borderSide: BorderSide(color: defaultTheme.mainColor)),
     focusedBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: defaultTheme.mainColor)),
     errorBorder: UnderlineInputBorder(

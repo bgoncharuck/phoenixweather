@@ -2,8 +2,7 @@ import 'dart:io';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:phoenixweather_flutter_app/services/firebase_user.dart';
 import 'package:phoenixweather_flutter_app/services/permissions.dart';
 import 'package:phoenixweather_flutter_app/services/loadlocalfiles.dart';
 import 'package:phoenixweather_flutter_app/services/firebase_load.dart';
@@ -33,11 +32,21 @@ Future syncFiles({
       if (noInternet == false)
         database.acceptAsyncNoWaiting(LoadLocationsFromFirebase());
 
+      // initial user
+      database.user= User(
+        id: "local",
+        home: null,
+        lastUpdate: null,
+      );
+
       // load local files
       await loadFiles(
         database: database,
         noInternet: noInternet, 
       );
+
+      if (noInternet == false && database.user.id != "local")
+        database.user.home= await firebaseGetHomeById(database.user.id);
 
       // clean old weather
       await database.cleanOldWeather();
@@ -58,6 +67,8 @@ class LoadingBloc extends Bloc<LoadingEvent, LoadingState> {
       yield LoadingSuccess();
     else if (event is LoadingErrorEvent)
       yield LoadingError();
+    else if (event is LoadingUpdateEvent)
+      yield LoadingUpdate();
   }
 }
 

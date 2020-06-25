@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:phoenixweather_flutter_app/constants.dart';
 import 'package:phoenixweather_flutter_app/bloc/loading_bloc.dart';
 import 'package:phoenixweather_flutter_app/routes.dart';
@@ -28,12 +30,17 @@ class _PhoenixWeatherAppState extends State<PhoenixWeatherApp> {
         BlocProvider<ShowBloc>(
           create: (BuildContext context) => ShowBloc(),
         ),
+        BlocProvider<LoadingBloc>(
+          create: (BuildContext context) => loadingBloc,
+        ),
       ],
       child: MultiProvider(
         providers: [
           Provider<RuntimeDatabase>(create: (database) => runtimeDatabase),
           Provider<IDefaultTheme>(create: (theme) => IndigoOrangeTheme()),
           Provider<ILanguageSetting>(create: (language) => systemLanguage),
+          Provider<FirebaseAuth>(create: (auth) => FirebaseAuth.instance),
+          Provider<GoogleSignIn>(create: (googleSignIn) => GoogleSignIn()),
         ],
         child: BlocBuilder(
           bloc: loadingBloc,
@@ -42,6 +49,8 @@ class _PhoenixWeatherAppState extends State<PhoenixWeatherApp> {
               return AppError();
             if (state is LoadingSuccess)
               return AppWorking();
+            if (state is LoadingUpdate)
+              return AppBuild();
 
             return AppLoading();
           },

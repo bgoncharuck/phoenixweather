@@ -17,9 +17,9 @@ class PhoenixWeatherHome extends StatelessWidget {
           size: 32,
           color: theme.onMainColor
         ),
-        title: SearchBar(key: UniqueKey()),
+        title: SearchBar(),
         actions: <Widget>[
-          UpdateButton(key: UniqueKey()),
+          UpdateButton(),
           LoginButton(key: UniqueKey()),
         ],
       ),

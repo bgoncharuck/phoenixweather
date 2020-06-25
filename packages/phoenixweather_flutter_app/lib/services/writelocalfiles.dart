@@ -1,27 +1,41 @@
 import 'dart:convert';
 
-import 'package:phoenixweather_database_common/phoenixweather_database_common.dart';
-import 'package:storage_access_flutter/storage_access_flutter.dart' as storage;
 import 'package:phoenixweather_flutter_app/constants.dart';
+import 'package:storage_access_flutter/storage_access_flutter.dart' as storage;
 
 class SaveLocalFiles implements AsyncRuntimeDatabaseVisitor {
   @override
   Future<bool> visit(RuntimeDatabase database) async {
+    bool weatherWasRecordedSuccessfully= await recordWeather(database);
+    bool locationsWasRecordedSuccessfully= await recordLocation(database);
+    bool userWasRecordedSuccessfully= await recordUser(database);
 
-    String weather= json.encode(database.toStorageJson());
-    bool weatherWasRecordedSuccessfully= await storage.write(
-      data: weather, 
-      asFile: weatherStorageFile,
-    );
-
-    String locations= json.encode(database.toNetworkJson());
-    bool locationsWasRecordedSuccessfully= await storage.write(
-      data: locations, 
-      asFile: locationsStorageFile,
-    );
-
-    if (weatherWasRecordedSuccessfully && locationsWasRecordedSuccessfully)
+    if (weatherWasRecordedSuccessfully && locationsWasRecordedSuccessfully && userWasRecordedSuccessfully)
       return true;
     return false;
   }
+}
+
+Future<bool> recordWeather(RuntimeDatabase database) async {
+  String weather= json.encode(database.toWeatherJson());
+  return await storage.write(
+    data: weather, 
+    asFile: weatherStorageFile,
+  );
+}
+
+Future<bool> recordLocation(RuntimeDatabase database) async {
+  String locations= json.encode(database.toNetworkJson());
+  return await storage.write(
+    data: locations, 
+    asFile: locationsStorageFile,
+  );
+}
+
+Future<bool> recordUser(RuntimeDatabase database) async {
+  String user= json.encode(database.toUserJson());
+  return await storage.write(
+    data: user, 
+    asFile: userStorageFile,
+  );
 }

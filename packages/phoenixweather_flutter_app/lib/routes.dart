@@ -15,21 +15,6 @@ class AppWorking extends StatelessWidget {
     RuntimeDatabase database= context.watch<RuntimeDatabase>();
     SearchBloc searchBloc= context.bloc<SearchBloc>();
 
-    // add data from local or network files
-    try {
-      if (database.user != null && database.user.lastUpdate != null) {
-        searchBloc.previousLocation= database.searchLocation(database.user.home);
-        searchBloc.previousData= database.searchWeather(
-          location: database.user.home, 
-          date: database.user.lastUpdate
-        );
-      }
-      else {
-        searchBloc.previousLocation= database.anyLocation();
-        searchBloc.previousData= database.anyWeather();
-      }
-    } catch (_) {}
-
     // add database methods to location client
     ILatLonApiClient locationClient= GoogleGeocoding();
     locationClient.searchInDatabase= database.searchLocation;
@@ -44,12 +29,7 @@ class AppWorking extends StatelessWidget {
     // add method to load location models to server
     searchBloc.pushLocationModelToServer= addModelToFireStore;
 
-    return  MaterialApp(
-      title: 'ExampleApp',
-      theme: lightThemeData(context.watch<IDefaultTheme>()),
-      initialRoute: '/home',
-      routes: routes,
-    );
+    return AppBuild();
   }
 }
 
@@ -58,7 +38,7 @@ class AppError extends StatelessWidget {
   Widget build(BuildContext context) {
     final language= context.watch<ILanguageSetting>();
     return MaterialApp(
-      title: 'ExampleApp',
+      title: 'Wrong Permissions',
       theme: lightThemeData(context.watch<IDefaultTheme>()),
       home: ErrorMessageScreen(
         language.errorFilesPermission, 
@@ -72,10 +52,22 @@ class AppLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
     MaterialApp(
-        title: 'ExampleApp',
+        title: 'Loading Phoenix Weather',
         theme: lightThemeData(context.watch<IDefaultTheme>()),
         home: PhoenixWeatherLoadingScreen(),
     );
+}
+
+class AppBuild extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return  MaterialApp(
+      title: 'Phoenix Weather',
+      theme: lightThemeData(context.watch<IDefaultTheme>()),
+      initialRoute: '/home',
+      routes: routes,
+    );
+  }
 }
 
 final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{

@@ -4,25 +4,37 @@ import 'package:phoenixweather_flutter_app/screens/error.dart';
 import 'package:phoenixweather_flutter_app/screens/loading.dart';
 import 'package:phoenixweather_flutter_app/components/weather_item_widgets.dart';
 import 'package:phoenixweather_flutter_app/components/show_item_full.dart';
+import 'package:phoenixweather_flutter_app/services/firebase_user.dart';
 import 'show_items.dart';
 
 class HomeBody extends StatelessWidget {
  @override
   Widget build(BuildContext context) {
+    final database= context.watch<RuntimeDatabase>();
     final SearchBloc searchBloc= context.bloc<SearchBloc>();
     final language= context.watch<ILanguageSetting>();
 
     searchBloc.add(
       SearchEventLocationEdited(
-        text: (searchBloc.previousLocation != null) ?
-        searchBloc.previousLocation.data : ""
+        text: (database.user.home != null) ?
+         database.user.home : ""
       ),
     );
+
     return BlocBuilder(
       bloc: searchBloc,
       builder: (BuildContext context, SearchState locationSearch) {
 
         if (locationSearch is SearchStateSuccess || locationSearch is SearchStatePrevious) {
+
+          if (locationSearch is SearchStateSuccess && database.user.id != "local") {
+            // save current user id:home
+            firebaseSetHomeById(
+              id: database.user.id, 
+              home: database.user.home,
+            );
+          }
+
           return PhoenixWeatherShow(data: locationSearch.data);
         }
 

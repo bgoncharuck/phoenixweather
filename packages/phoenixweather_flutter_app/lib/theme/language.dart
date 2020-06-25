@@ -122,7 +122,7 @@ class RussianLanguage implements ILanguageSetting {
 
 ILanguageSetting get systemLanguage {
   String languageCode = Platform.localeName.split('_')[0];
-  print("Language code is $languageCode");
+  // print("Language code is $languageCode");
   switch (languageCode) {
     case 'uk':
       return UkranianLanguage();

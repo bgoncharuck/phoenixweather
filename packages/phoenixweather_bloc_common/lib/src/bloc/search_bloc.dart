@@ -54,6 +54,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
             if (pushLocationModelToServer != null)
               pushLocationModelToServer(locationModel);
+            if (database != null)
+              database.user.home= locationModel.data;
 
             // get weather
             final openWeatherModel= await localWeatherClient.getByLocation(location: locationModel);
@@ -74,6 +76,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
               );
               if (writeRecords != null)
                 database.acceptAsyncNoWaiting(writeRecords);
+              database.user.lastUpdate= currentData.dt;
             }
             yield SearchStateSuccess(
               location: locationModel, 
@@ -109,6 +112,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
               );
               if (writeRecords != null)
                 database.acceptAsyncNoWaiting(writeRecords);
+              database.user.lastUpdate= currentData.dt;
             }
             yield SearchStateSuccess(
               location: previousLocation, 

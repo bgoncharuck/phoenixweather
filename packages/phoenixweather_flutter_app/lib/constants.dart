@@ -7,3 +7,4 @@ export 'package:phoenixweather_bloc_common/phoenixweather_bloc_common.dart';
 
 const locationsStorageFile= 'phoenixweather_location.json';
 const weatherStorageFile= 'phoenixweather_weather.json';
+const userStorageFile= 'phoenixweather_user.json';

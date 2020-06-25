@@ -142,20 +142,21 @@ class RuntimeDatabase {
     'locations': locations.toJson()
   };
 
-  // Used to save/load local data
-  void fromStorageJson(Map<String, dynamic> json) {
+
+  void fromWeatherJson(Map<String, dynamic> json) {
     weathers.fromJson(json['weathers']);
-    user= (json['user'] != null) ?
-    User.fromJson(json['user']): user;
   }
 
-  Map<String, dynamic> toStorageJson()  { 
-    if (user != null) return {
-      'user': user.toJson(),
-      'weathers': weathers.toJson()
-    };
-    return {
-      'weathers': weathers.toJson()
-    };
+  Map<String, dynamic> toWeatherJson() => { 
+    'weathers': weathers.toJson(),
+  };
+
+  void fromUserJson(Map<String, dynamic> json) {
+    user= User.fromJson(json['user']);
   }
+
+  Map<String, dynamic> toUserJson()  => {
+    'user': user.toJson(),
+  };
+
 }

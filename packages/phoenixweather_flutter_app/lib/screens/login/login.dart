@@ -8,37 +8,14 @@ class PhoenixWeatherLoginScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    LoginFacebookButton(key: UniqueKey()),
-                    Text(
-                      "Facebook",
-                      style: TextStyle(
-                        fontSize: 22
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    LoginGoogleButton(key: UniqueKey()),
-                    Text(
-                      "Google",
-                      style: TextStyle(
-                        fontSize: 22
-                      ),
-                    ),
-                  ],
-                ),
+                Expanded(child: LoginFacebookButton()),
+                Expanded(child: LoginGoogleButton()),
               ],
-            )
-
-
+            ),
           ],
         ),
       ),

@@ -10,52 +10,52 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-
-  TextEditingController _textController;
   RuntimeDatabase _database;
   SearchBloc _searchBloc;
   IDefaultTheme _theme;
+  TextEditingController _textController;
 
-@override
+  @override
   void initState() {
     super.initState();
+
     _database= context.read<RuntimeDatabase>();
     _searchBloc= context.bloc<SearchBloc>();
     _theme= context.read<IDefaultTheme>();
 
-    if (_database.user != null && _database.user.home != null) {
+    if (_database.user.home != null) {
       _searchBloc.previousLocation= _database.searchLocation(_database.user.home);
     }
 
-    if (_database.user != null && _database.user.lastUpdate != null && _database.user.home != null) {
+    if (_database.user.lastUpdate != null && _database.user.home != null) {
       final result= _database.searchWeather(
         location: _database.user.home,
         date: _database.user.lastUpdate
       );
 
       if (result != null)
-      _searchBloc.previousData= result;
+        _searchBloc.previousData= result;
     }
 
     _textController = TextEditingController(
-        text: (_searchBloc.previousLocation != null) ?
-            _searchBloc.previousLocation.data: ''
-      );
+      text: (_database.user.home != null) ?
+      _database.user.home: ''
+    );
   }
 
- @override
+@override
   Widget build(BuildContext context) {
-
     return TextField(
       controller: _textController,
       autocorrect: false,
+      onTap: () {
+        _textController.text= '';
+      },
       onEditingComplete: () {
-        setState(() {
-            _searchBloc.add(
-            SearchEventLocationEdited(text: _textController.text),
-          );
-          FocusScope.of(context).unfocus();
-        });
+        _searchBloc.add(
+          SearchEventLocationEdited(text: _textController.text),
+        );
+        FocusScope.of(context).unfocus();
       },
       decoration: InputDecoration(
         border: InputBorder.none,

@@ -13,3 +13,8 @@ class LoadingSuccessEvent extends LoadingEvent {
   @override
   List<Object> get props => [];
 }
+
+class LoadingUpdateEvent extends LoadingEvent {
+  @override
+  List<Object> get props => [];
+}

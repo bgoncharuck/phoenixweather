@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:phoenixweather_flutter_app/constants.dart';
 
-class UpdateButton extends StatefulWidget {
-  UpdateButton({Key key}) : super(key: key);
-
-  @override
-  _UpdateButtonState createState() => _UpdateButtonState();
-}
-
-class _UpdateButtonState extends State<UpdateButton> {
+class UpdateButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme= context.watch<IDefaultTheme>();
+    final searchBloc= context.bloc<SearchBloc>();
+    
     return FlatButton(
       child: Icon(
         Icons.refresh,
           size: 32,
           color: theme.onMainColor
         ),
-            // Update
+      // Update
       onPressed: () {
-
+        searchBloc.add(SearchEventUpdate());
       }, 
     );
   }
