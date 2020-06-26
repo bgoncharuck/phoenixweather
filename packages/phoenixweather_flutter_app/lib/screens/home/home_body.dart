@@ -43,7 +43,15 @@ class HomeBody extends StatelessWidget {
         else if (locationSearch is SearchStateWrongGoogleCodingApiKey)
           return ErrorMessage(language.errorWrongLocation, "");
         else if (locationSearch is SearchStateEmpty)
-          return Center(child: Text(language.emptyPage));
+          return Center(child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(language.emptyPage),
+          ));
+        else if (locationSearch is SearchStateNoInternet)
+          return Center(child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(language.noInternet),
+          ));
         else if (locationSearch is SearchStateError)
           return ErrorMessage(locationSearch.errorText, "");
         

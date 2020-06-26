@@ -49,7 +49,7 @@ class _PhoenixWeatherAppState extends State<PhoenixWeatherApp> {
               return AppError();
             if (state is LoadingSuccess)
               return AppWorking();
-            if (state is LoadingUpdate)
+            if (state is LoadingUpdate) 
               return AppBuild();
 
             return AppLoading();

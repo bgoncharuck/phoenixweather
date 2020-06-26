@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:meta/meta.dart';
+import 'package:phoenixweather_bloc_common/phoenixweather_bloc_common.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -20,33 +21,42 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     SearchEvent event,
   ) async* {
     
-    if (await noInternetConection()) {
-      if (previousData != null && previousLocation != null)
-        yield SearchStatePrevious(
-            location: previousLocation,
-            data: previousData
-        );
-      else if (database != null && database.user.lastUpdate != null) {
-        previousLocation= database.searchLocation(database.user.home);
-        previousData= database.searchWeather(location: database.user.home, date: database.user.lastUpdate);
-        // print(json.encode(database.weathers.toJson()));
-        yield SearchStatePrevious(
-            location: previousLocation,
-            data: previousData
-        );
-      }
-      else yield SearchStateError("No internet connection");
-    }
-
     if (event is SearchEventLocationEdited) {
       final String locationString= event.text;
       if (locationString.isEmpty) yield this.initialState;      
       else {
+
         // loading state while operation is pending
         yield SearchStateLoading();
         
         // Main stuff of location/weather search is going on here
         try {
+
+          // offline mode
+          if (await noInternetConection()) {
+            if (database != null) {
+
+              final locationModel= database.searchLocation(event.text);
+              if (locationModel == null)
+                yield SearchStateNoInternet();
+              else {
+                final weatherData= database.searchWeather(
+                  location: locationModel.data, 
+                  date: null
+                );
+                if (weatherData == null) {
+                  print("lol");
+                  yield SearchStateNoInternet();
+                }
+                else {
+                  database.user.home= locationModel.data;
+                  database.user.lastUpdate= weatherData.dt;
+                  yield SearchStateSuccess(location: locationModel, data: weatherData);
+                  print("your home location will not change on server");
+                }
+              }
+            } else yield SearchStateNoInternet();
+          } else {
     
           // get location
           final locationModel= await localLocationClient.getByCityName(city: locationString);
@@ -93,7 +103,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
               data: currentData
             );
           }
-        } catch (error) {
+        }} catch (error) {
           print(error.toString());
           yield initialState;
         }

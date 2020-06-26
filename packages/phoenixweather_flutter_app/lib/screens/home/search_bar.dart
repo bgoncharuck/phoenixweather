@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:phoenixweather_database_common/phoenixweather_database_common.dart';
 import 'package:phoenixweather_flutter_app/constants.dart';
+import 'label.dart';
 
-class SearchBar extends StatelessWidget {
-@override
-  Widget build(BuildContext context) {
+class SearchBar extends StatefulWidget {
+  String label;
+  @override
+  _SearchBarState createState() => _SearchBarState();
+}
 
-    RuntimeDatabase _database;
-    SearchBloc _searchBloc;
-    IDefaultTheme _theme;
-    TextEditingController _textController;
+class _SearchBarState extends State<SearchBar> {
 
-    _database= context.watch<RuntimeDatabase>();
+  RuntimeDatabase _database;
+  SearchBloc _searchBloc;
+  IDefaultTheme _theme;
+  TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _database= context.read<RuntimeDatabase>();
     _searchBloc= context.bloc<SearchBloc>();
-    _theme= context.watch<IDefaultTheme>();
+    _theme= context.read<IDefaultTheme>();
 
     if (_database.user.home != null) {
       _searchBloc.previousLocation= _database.searchLocation(_database.user.home);
@@ -29,30 +38,46 @@ class SearchBar extends StatelessWidget {
         _searchBloc.previousData= result;
     }
 
-    _textController = TextEditingController(
-      text: (_database.user.home != null) ?
-      _database.user.home: ''
-    );
+    _textController = TextEditingController();
 
-    return TextField(
-      controller: _textController,
-      autocorrect: false,
-      onTap: () {
-        _textController.text= '';
-      },
-      onEditingComplete: () {
-        _searchBloc.add(
-          SearchEventLocationEdited(text: _textController.text),
-        );
-        FocusScope.of(context).unfocus();
-      },
-      decoration: InputDecoration(
-        border: InputBorder.none,
-      ),
-      style: TextStyle(
-        color: _theme.onMainColor,
-        decoration: TextDecoration.none,
-      ),
+    widget.label= (_database.user.home != null) ? _database.user.home : '';
+  }
+
+@override
+  Widget build(BuildContext context) {
+
+    return Row(
+      children: <Widget>[
+        Expanded(child: CurrentHomeLabel(
+          label: widget.label, 
+          color: _theme.onMainColor, 
+          fontSize: 12,
+        )),
+        Expanded(
+          child: TextField(
+            controller: _textController,
+            autocorrect: false,
+            onEditingComplete: () {
+              final savedSearch= _textController.text;
+              setState(() {
+                widget.label= savedSearch;
+                _textController.text= '';               
+              });
+              FocusScope.of(context).unfocus();
+              _searchBloc.add(
+                SearchEventLocationEdited(text: savedSearch),
+              );
+            },
+            decoration: InputDecoration(
+              border: InputBorder.none,
+            ),
+            style: TextStyle(
+              color: _theme.onMainColor,
+              decoration: TextDecoration.none,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

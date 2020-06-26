@@ -73,7 +73,10 @@ class RuntimeDatabase {
     @required String location,
     @required int date,
   })  {
-    return weathers.byLocationFrom[location].dataByDate[date];
+    final weatherByLocation= weathers.byLocationFrom[location];
+    if (weatherByLocation == null) return null;
+    if (date == null) return weatherByLocation.dataByDate.values.last;
+    return weatherByLocation.dataByDate[date];
  }
 
   bool addWeather({

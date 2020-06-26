@@ -5,6 +5,7 @@ abstract class ILanguageSetting {
   String get errorFilesPermission;
   String get errorGoogleApi;
   String get errorWrongLocation;
+  String get noInternet;
   String get emptyPage;
   String get night;
   String get morning;
@@ -29,6 +30,7 @@ class EnglishLanguage implements ILanguageSetting {
   final String errorFilesPermission= "My Lord, you did not grant me access to a storage.\nI can't save or load these config files:\n";
   final String errorGoogleApi= "No Google Coding API key.";
   final String errorWrongLocation= "Wrong city or location. No such data record.";
+  final String noInternet= "No record in offline database was found.";
   final String emptyPage= "Enter location in the top bar.";
   final String night= "Night";
   final String morning= "Morning";
@@ -53,6 +55,7 @@ class GermanLanguage implements ILanguageSetting {
   final String errorFilesPermission= "Mein Herr, Sie haben keinen Zugang zu dem Speicher gewährt.\nIch kann diese Konfigurationsdateien nicht speichern oder laden:\n";
   final String errorGoogleApi= "Kein Google Coding API-Schlüssel.";
   final String errorWrongLocation= "Falsche Stadt oder Ort. Keine solche Aufzeichnung.";
+  final String noInternet= "Es wurde kein Datensatz in der Offline-Datenbank gefunden.";
   final String emptyPage= "Suchort in der oberen Leiste.";
   final String night= "Nacht";
   final String morning= "Morgen";
@@ -77,6 +80,7 @@ class UkranianLanguage implements ILanguageSetting {
   final String errorFilesPermission= "Мій Володарю, я не можу зберегти чи завантажити ось ці файли:";
   final String errorGoogleApi= "Відсутній ключ Google Coding API";
   final String errorWrongLocation= "Ви вказали неправильне місто або його немає у базі.";
+  final String noInternet= "Не знайдено записів у локальній базі даних. Підключіть інтернет, або пошукайте щось інше.";
   final String emptyPage= "Введіть назву міста зверху, щоб розпочати пошук.";
   final String night= "Ніч";
   final String morning= "Ранок";
@@ -101,6 +105,7 @@ class RussianLanguage implements ILanguageSetting {
   final String errorFilesPermission= "Мой господин, я не могу сохранить или загрузить вот эти файлы:";
   final String errorGoogleApi= "Отсутствует ключ Google Coding API";
   final String errorWrongLocation= "Вы указали неправильный город или его нет в базе.";
+  final String noInternet= "Не найдено записей в локальной базе данных. Подключите интернет, или поищите что-то другое.";
   final String emptyPage= "Введите название города сверху, чтобы начать поиск.";
   final String night= "Ночь";
   final String morning= "Утро";

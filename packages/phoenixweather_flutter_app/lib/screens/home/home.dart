@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phoenixweather_common/phoenixweather_common.dart';
 import 'package:phoenixweather_flutter_app/constants.dart';
 
 import 'search_bar.dart';
@@ -10,13 +11,10 @@ class PhoenixWeatherHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme= context.watch<IDefaultTheme>();
+    final database= context.watch<RuntimeDatabase>();
+
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.search,
-          size: 32,
-          color: theme.onMainColor
-        ),
         title: SearchBar(),
         actions: <Widget>[
           UpdateButton(),

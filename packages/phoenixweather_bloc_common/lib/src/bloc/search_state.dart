@@ -46,6 +46,7 @@ class SearchStateSuccess extends SearchState{
 
 class SearchStateWrongGoogleCodingApiKey extends SearchState{}
 class SearchStateWrongLocation extends SearchState{}
+class SearchStateNoInternet extends SearchState {}
 class SearchStateError extends SearchState{
   final String errorText;
   const SearchStateError(this.errorText);

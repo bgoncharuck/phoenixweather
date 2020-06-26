@@ -4,6 +4,17 @@ import 'package:phoenixweather_common/phoenixweather_common.dart';
 
 Future<void> addModelToFireStore(ILatLonApiModel model) async {
   if (await checkInternetConection()) {
+
+    // check if not added
+    await Firestore.instance
+      .collection('locations')
+      .document('0PIFW0DUCaCyEV4G4J32')
+      .get()
+      .then((DocumentSnapshot ds) {
+        if (ds.data['names'].contains(model.data))
+          return;
+    });
+
     Firestore.instance
     .collection('locations')
     .document('0PIFW0DUCaCyEV4G4J32')
