@@ -6,34 +6,29 @@ import 'package:phoenixweather_flutter_app/services/firebase_auth.dart';
 class LoginFacebookButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final theme= context.watch<IDefaultTheme>();
-    return  FlatButton(
-      child: Column(
-        children: [
-          Icon(
-            Icons.account_circle,
-            color: theme.mainColor,
-            size: 64,
-          ), 
-          SizedBox(height: 32),
-          Text(
-            "Facebook",
-            style: TextStyle(
-              fontSize: 22
+    final theme = context.watch<IDefaultTheme>();
+    return FlatButton(
+        child: Column(
+          children: [
+            Icon(
+              Icons.account_circle,
+              color: theme.mainColor,
+              size: 64,
             ),
-          ),
-        ],
-      ),
-    onPressed: () {
-      loginAction(
-        context: context, 
-        serviceLogin: FacebookLogin,
-      );      
-    }
-    );
+            SizedBox(height: 32),
+            Text(
+              "Facebook",
+              style: TextStyle(fontSize: 22),
+            ),
+          ],
+        ),
+        onPressed: () {
+          loginAction(
+            context: context,
+            serviceLogin: facebookLogin,
+          );
+        });
   }
 }
 
-Future<String> FacebookLogin(BuildContext context) async {
-
-}
+Future<String> facebookLogin(BuildContext context) async {}
