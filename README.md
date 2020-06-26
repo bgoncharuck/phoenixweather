@@ -16,11 +16,11 @@ and by facebook API when their covoid hysteria finally ends.
 ```
 
 # For Developers
-### Version: 0.1.0
+### Version: 0.1.3
 Please, see packages/phoenixweather_flutter_app for developer details.
 #### "Issues"
 - Have you added your API keys before using flutter build? No? Then don't say it not works.
-- See android [appbundle 0.1.2](https://github.com/bgoncharuck/phoenixweather/releases/tag/0.1.2) in release section
+- See android [appbundle 0.1.3](https://github.com/bgoncharuck/phoenixweather/releases/tag/0.1.3) in release section
 - See play market:
 
 #### Todo
