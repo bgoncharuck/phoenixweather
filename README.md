@@ -21,7 +21,7 @@ Please, see packages/phoenixweather_flutter_app for developer details.
 #### "Issues"
 - Have you added your API keys before using flutter build? No? Then don't say it not works.
 - See android [appbundle 0.1.3](https://github.com/bgoncharuck/phoenixweather/releases/tag/0.1.3) in release section
-- See play market:
+- [Find it on play market](https://play.google.com/store/apps/details?id=com.bgoncharuck.phoenixweather.phoenixweather_flutter_app)
 
 #### Todo
 - facebook API, when avaible.
