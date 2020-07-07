@@ -21,6 +21,7 @@ dependencies:
   cloud_firestore: ^0.13.7
   firebase_auth: ^0.16.1
   google_sign_in: ^4.5.1
+  storage_access: ^0.0.2
 
   phoenixweather_common:
     path: ../phoenixweather_common
@@ -30,9 +31,6 @@ dependencies:
 
   phoenixweather_database_common:
     path: ../phoenixweather_database_common
-
-  storage_access_flutter:
-    path: ../storage_access_flutter
 
   flutter_spinkit: ^2.1.0
 

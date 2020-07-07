@@ -98,7 +98,7 @@ packages:
       name: file
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.0"
+    version: "5.2.1"
   firebase:
     dependency: transitive
     description:
@@ -281,7 +281,7 @@ packages:
       name: path_provider_linux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1+1"
+    version: "0.0.1+2"
   path_provider_macos:
     dependency: transitive
     description:
@@ -406,13 +406,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.3"
-  storage_access_flutter:
+  storage_access:
     dependency: "direct main"
     description:
-      path: "../storage_access_flutter"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: storage_access
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   stream_channel:
     dependency: transitive
     description:

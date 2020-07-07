@@ -3,11 +3,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:phoenixweather_flutter_app/services/firebase_user.dart';
-import 'package:phoenixweather_flutter_app/services/permissions.dart';
 import 'package:phoenixweather_flutter_app/services/loadlocalfiles.dart';
 import 'package:phoenixweather_flutter_app/services/firebase_load.dart';
 import 'package:phoenixweather_database_common/phoenixweather_database_common.dart';
-
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -15,45 +13,35 @@ import 'package:equatable/equatable.dart';
 part 'loading_event.dart';
 part 'loading_state.dart';
 
+Future syncFiles(
+    {@required RuntimeDatabase database, @required LoadingBloc bloc}) async {
+  bool noInternet = await checkIfNoInternetConection();
 
-Future syncFiles({
-  @required RuntimeDatabase database,
-  @required LoadingBloc bloc
-}) async {
-  
-    await requestPermissions;
-    if (statusOf[Permission.storage].isGranted == false) {
-      bloc.add(LoadingErrorEvent());
-    } else {    
+  // load locations from internet
+  if (noInternet == false)
+    database.acceptAsyncNoWaiting(LoadLocationsFromFirebase());
 
-      bool noInternet= await checkIfNoInternetConection();
+  // initial user
+  database.user = User(
+    id: "local",
+    home: null,
+    lastUpdate: null,
+  );
 
-      // load locations from internet
-      if (noInternet == false)
-        database.acceptAsyncNoWaiting(LoadLocationsFromFirebase());
+  // load local files
+  await loadFiles(
+    database: database,
+    noInternet: noInternet,
+  );
 
-      // initial user
-      database.user= User(
-        id: "local",
-        home: null,
-        lastUpdate: null,
-      );
+  if (noInternet == false && database.user.id != "local")
+    database.user.home = await firebaseGetHomeById(database.user.id);
 
-      // load local files
-      await loadFiles(
-        database: database,
-        noInternet: noInternet, 
-      );
+  // clean old weather
+  await database.cleanOldWeather();
 
-      if (noInternet == false && database.user.id != "local")
-        database.user.home= await firebaseGetHomeById(database.user.id);
-
-      // clean old weather
-      await database.cleanOldWeather();
-
-      bloc.add(LoadingSuccessEvent());
-    }
-  }
+  bloc.add(LoadingSuccessEvent());
+}
 
 class LoadingBloc extends Bloc<LoadingEvent, LoadingState> {
   @override
@@ -67,8 +55,7 @@ class LoadingBloc extends Bloc<LoadingEvent, LoadingState> {
       yield LoadingSuccess();
     else if (event is LoadingErrorEvent)
       yield LoadingError();
-    else if (event is LoadingUpdateEvent)
-      yield LoadingUpdate();
+    else if (event is LoadingUpdateEvent) yield LoadingUpdate();
   }
 }
 
