@@ -9,8 +9,8 @@ environment:
 
 dependencies:
   meta: ^1.1.8
-  bloc: ^4.0.0
-  equatable: ^1.2.0
+  bloc: ^6.1.0
+  equatable: ^1.2.5
   rxdart: ^0.24.1
   
   phoenixweather_common:

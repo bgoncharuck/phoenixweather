@@ -9,5 +9,5 @@ environment:
 
 dependencies:
   meta: ^1.1.8
-  equatable: ^1.2.0
+  equatable: ^1.2.5
   http: ^0.12.1

@@ -44,6 +44,8 @@ Future syncFiles(
 }
 
 class LoadingBloc extends Bloc<LoadingEvent, LoadingState> {
+  LoadingBloc(LoadingState initialState) : super(initialState);
+
   @override
   LoadingState get initialState => LoadingInitial();
 

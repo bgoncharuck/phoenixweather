@@ -5,29 +5,29 @@ import 'package:phoenixweather_common/phoenixweather_common.dart';
 Future<void> addModelToFireStore(ILatLonApiModel model) async {
   if (await checkInternetConection()) {
     // check if not added
-    bool wasAdded = await Firestore.instance
+    bool wasAdded = await FirebaseFirestore.instance
         .collection('locations')
-        .document('0PIFW0DUCaCyEV4G4J32')
+        .doc('0PIFW0DUCaCyEV4G4J32')
         .get()
         .then((DocumentSnapshot ds) {
-      if (ds.data['names'].contains(model.data)) return true;
+      if (ds.data()['names'].contains(model.data)) return true;
       return false;
     });
     if (wasAdded) return;
 
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection('locations')
-        .document('0PIFW0DUCaCyEV4G4J32')
-        .updateData({
+        .doc('0PIFW0DUCaCyEV4G4J32')
+        .update({
       'models': FieldValue.arrayUnion([
         {'data': model.data, 'lat': model.lat, 'lon': model.lon}
       ])
     });
 
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection('locations')
-        .document('0PIFW0DUCaCyEV4G4J32')
-        .updateData({
+        .doc('0PIFW0DUCaCyEV4G4J32')
+        .update({
       'names': FieldValue.arrayUnion([model.data])
     });
   }

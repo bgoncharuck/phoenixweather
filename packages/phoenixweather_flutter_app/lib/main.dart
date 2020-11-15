@@ -5,25 +5,22 @@ import 'package:phoenixweather_flutter_app/constants.dart';
 import 'package:phoenixweather_flutter_app/bloc/loading_bloc.dart';
 import 'package:phoenixweather_flutter_app/routes.dart';
 
-void main() =>  runApp(PhoenixWeatherApp());
+void main() => runApp(PhoenixWeatherApp());
 
 class _PhoenixWeatherAppState extends State<PhoenixWeatherApp> {
-  final loadingBloc= LoadingBloc();
-  final runtimeDatabase= RuntimeDatabase();  
+  final loadingBloc = LoadingBloc(LoadingInitial());
+  final runtimeDatabase = RuntimeDatabase();
 
   @override
   void initState() {
     super.initState();
-    syncFiles(
-      bloc: loadingBloc,
-      database:  runtimeDatabase
-    );
+    syncFiles(bloc: loadingBloc, database: runtimeDatabase);
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers:[
+      providers: [
         BlocProvider<SearchBloc>(
           create: (BuildContext context) => SearchBloc(),
         ),
@@ -42,15 +39,11 @@ class _PhoenixWeatherAppState extends State<PhoenixWeatherApp> {
           Provider<FirebaseAuth>(create: (auth) => FirebaseAuth.instance),
           Provider<GoogleSignIn>(create: (googleSignIn) => GoogleSignIn()),
         ],
-        child: BlocBuilder(
-          bloc: loadingBloc,
+        child: BlocBuilder<LoadingBloc, LoadingState>(
           builder: (BuildContext context, LoadingState state) {
-            if (state is LoadingError)
-              return AppError();
-            if (state is LoadingSuccess)
-              return AppWorking();
-            if (state is LoadingUpdate) 
-              return AppBuild();
+            if (state is LoadingError) return AppError();
+            if (state is LoadingSuccess) return AppWorking();
+            if (state is LoadingUpdate) return AppBuild();
 
             return AppLoading();
           },

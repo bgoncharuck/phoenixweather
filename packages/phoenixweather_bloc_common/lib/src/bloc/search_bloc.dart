@@ -151,7 +151,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     this.database,
     this.writeRecords,
     this.pushLocationModelToServer,
-  }) {
+  }) : super(null) {
     localLocationClient =
         (localLocationClient != null) ? localLocationClient : locationClient;
     localWeatherClient =

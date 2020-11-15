@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   meta: ^1.1.8
-  equatable: ^1.2.0
+  equatable: ^1.2.5
   
   phoenixweather_common:
     path: ../phoenixweather_common
