@@ -5,7 +5,6 @@ import 'package:phoenixweather_common/phoenixweather_common.dart';
 import '../client/client.dart';
 import '../models/latlonapi.dart';
 
-import '../private/key.dart';
 /* 
 this file was git ignored
 
@@ -15,43 +14,39 @@ use your own key here:
 example:
   const String privateGoogleApiKey = "aKeY";
 */
-const wrongGoogleApiKeyError= "Wrong Google API Key.";
-const wrongLocationName= "Wrong Location Name.";
+import '../private/key.dart';
 
+const wrongGoogleApiKeyError = "Wrong Google API Key.";
+const wrongLocationName = "Wrong Location Name.";
 
-abstract class ILatLonApiClient {
+/// IN: city or location name
+/// OUT: model
+///
+/// Model: LatLonApiModel
+abstract class LatLonApiClient {
+  GetRequestByApiKey client;
+  LatLonApiModel Function(String location) searchInDatabase;
+  bool Function(LatLonApiModel locationModel) addToDatabase;
 
-  IGetRequestByApiKey client;
-  ILatLonApiModel Function(String location) searchInDatabase;
-  bool Function(ILatLonApiModel locationModel) addToDatabase;
-
-  Future<ILatLonApiModel> getByCityName ({@required String city});
-  /*
-    IN: city or location name
-    OUT: model
-
-    Model:
-    ILatLonApiModel {
-      error text on error
-      String get city;
-
-      0.0 on error
-      double get lat;
-
-      0.0 on error
-      double get lon;
-    }
-  */
+  Future<LatLonApiModel> getByCityName({@required String city});
 }
 
-class GoogleGeocoding implements ILatLonApiClient {
+class GoogleGeocoding implements LatLonApiClient {
+  /// singleton
+  GoogleGeocoding._();
+  static GoogleGeocoding _googleGeocoding;
+  factory GoogleGeocoding() {
+    if (_googleGeocoding == null) _googleGeocoding = GoogleGeocoding._();
+    return _googleGeocoding;
+  }
+  //
 
-  IGetRequestByApiKey client= DefaultGetRequestByApiKey(
-    apiKey: privateGoogleApiKey, 
+  GetRequestByApiKey client = DefaultGetRequestByApiKey(
+    apiKey: privateGoogleApiKey,
     baseUrl: "https://maps.googleapis.com/maps/api/geocode/json",
   );
-  ILatLonApiModel Function(String location) searchInDatabase= null;
-  bool Function(ILatLonApiModel locationModel) addToDatabase= null;
+  LatLonApiModel Function(String location) searchInDatabase;
+  bool Function(LatLonApiModel locationModel) addToDatabase;
 
   ErrorLatLonApiModel onError({@required text}) {
     // @DEBUG
@@ -59,36 +54,37 @@ class GoogleGeocoding implements ILatLonApiClient {
     return ErrorLatLonApiModel(error: text);
   }
 
-  Future<ILatLonApiModel> getByCityName ({@required String city}) async {
-
-    // If location is already saved
+  Future<LatLonApiModel> getByCityName({@required String city}) async {
+    /// If location is already saved
     if (searchInDatabase != null) {
-      final ILatLonApiModel fromDatabase= searchInDatabase(city);
-      if(fromDatabase != null) return fromDatabase;
+      final LatLonApiModel fromDatabase = searchInDatabase(city);
+      if (fromDatabase != null) return fromDatabase;
     }
 
-    final  results= await client.request(
-      terms: "address=$city", 
+    final results = await client.request(
+      terms: "address=$city",
     );
 
-    // Most errors will be catched here
-    final error= results['error_message'] as String;
+    /// Most errors will be catched here
+    final error = results['error_message'] as String;
     if (error != null) {
-      if (RegExp(r'This API project is not authorized',caseSensitive: false).hasMatch(error)) 
-        return onError(text: wrongGoogleApiKeyError);
+      if (RegExp(r'This API project is not authorized', caseSensitive: false)
+          .hasMatch(error)) return onError(text: wrongGoogleApiKeyError);
       return onError(text: error);
     }
-    // Index errors mean that user gives incorect location name
-    // And google was shocked by it, responding with some messy text
-    // So shocked, that tag 'error_message' was missed.
-    Map<String,dynamic> location;
+
+    /// Index errors mean that user gives incorect location name
+    /// And google was shocked by it, responding with some messy text
+    /// So shocked, that tag 'error_message' was missed.
+    Map<String, dynamic> location;
     try {
       location = results['results'][0]['geometry']['location'];
-    } catch(indexError) {
+    } catch (indexError) {
       return onError(text: wrongLocationName);
     }
 
-    final locationModel= DefaultLatLonApiModel(city: city, lat: location['lat'], lon: location['lng']);
+    final locationModel = DefaultLatLonApiModel(
+        city: city, lat: location['lat'], lon: location['lng']);
     if (addToDatabase != null) addToDatabase(locationModel);
     return locationModel;
   }

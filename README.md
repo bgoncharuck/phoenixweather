@@ -1,5 +1,4 @@
 # <img width="128px" height="128px" src="repo_assets/icon.png" /> Phoenix Weather
-`...actually, reusable modules and an app! What a treasure!`
 
 # For Users
 <div style="text-align:center" markdown="1">
@@ -10,10 +9,8 @@
 
 ###
 
-Simple weather app with home location sync between devices by Google API.
-```
-and by facebook API when their covoid hysteria finally ends.
-```
+Simple weather app 
+
 
 # For Developers
 ### Version: 0.1.4

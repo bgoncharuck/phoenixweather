@@ -5,7 +5,6 @@ import '../client/client.dart';
 import '../models/latlonapi.dart';
 import '../models/openweather.dart';
 
-import '../private/key.dart';
 /* 
 this file was git ignored
 
@@ -15,43 +14,44 @@ use your own key here:
 example:
   const String privateOpenWeatherApiKey = "aKeY";
 */
+import '../private/key.dart';
 
-abstract class IOpenWeatherAPIClient {
-
-  IGetRequestByApiKey client;
-
-  Future<OpenWeatherModel> getByLocation ({@required ILatLonApiModel location});
-  /*
-    IN: location model
-    OUT: model
-
-    Model:
-      ILatLonApiModel location;
-      int timeZoneOffset;
-
-      will be fully copied from OpenWeather response.results> hourly:, daily:
-      List<OpenWeatherHour> hourly;
-      List<OpenWeatherDay> daily;
-  */
+///  IN: location model
+///  OUT: model
+///
+///  Model:
+///   - ILatLonApiModel location;
+///   - int timeZoneOffset;
+///
+///    will be fully copied from OpenWeather response.results> hourly:, daily:
+///    - List of OpenWeatherHour hourly;
+///    - List of OpenWeatherDay daily;
+abstract class OpenWeatherAPIClient {
+  GetRequestByApiKey client;
+  Future<OpenWeatherModel> getByLocation({@required LatLonApiModel location});
 }
 
-class OpenWeather implements IOpenWeatherAPIClient {
+class OpenWeather implements OpenWeatherAPIClient {
+  /// singleton
+  OpenWeather._();
+  static OpenWeather _openWeather;
+  factory OpenWeather() {
+    if (_openWeather == null) _openWeather = OpenWeather._();
+    return _openWeather;
+  }
+  //
 
-  IGetRequestByApiKey client= DefaultGetRequestByApiKey(
-    apiKey: privateOpenWeatherApiKey, 
-    baseUrl: "https://api.openweathermap.org/data/2.5/onecall",
-    termKey: "appid"
-  );
+  GetRequestByApiKey client = DefaultGetRequestByApiKey(
+      apiKey: privateOpenWeatherApiKey,
+      baseUrl: "https://api.openweathermap.org/data/2.5/onecall",
+      termKey: "appid");
 
-  Future<OpenWeatherModel> getByLocation ({@required ILatLonApiModel location}) async {
-
-    Map<String,dynamic>  results= await client.request(
-      terms: "lat=${location.lat}&lon=${location.lon}&exclude=minutely", 
+  Future<OpenWeatherModel> getByLocation(
+      {@required LatLonApiModel location}) async {
+    Map<String, dynamic> results = await client.request(
+      terms: "lat=${location.lat}&lon=${location.lon}&exclude=minutely",
     );
 
-    return OpenWeatherModel.fromJson(
-      results,
-      latlonmodel: location
-    );
+    return OpenWeatherModel.fromJson(results, latlonmodel: location);
   }
 }
