@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
 
-import '../client/client.dart';
+import 'client.dart';
 import '../models/latlonapi.dart';
 import '../models/openweather.dart';
 

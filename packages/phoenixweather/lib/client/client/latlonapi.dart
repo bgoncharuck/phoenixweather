@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
-import 'package:phoenixweather_common/phoenixweather_common.dart';
 
-import '../client/client.dart';
+import 'client.dart';
 import '../models/latlonapi.dart';
 
 /* 

@@ -1,4 +1,4 @@
-## Phoenixweather Common Dart Package
+## Phoenixweather Client Dart Package
 
 #### Main Purpose
 - **IN**: City name
@@ -25,3 +25,19 @@ if (weatherInParis == null) {
     print(synoptic.locationModel.data);
 } else print("Temperature in ${synoptic.locationModel.data} is ${weatherInParis.hourly[0].temp} K");
 ```
+
+## models
+#### WeatherModel
+ - `int` dt;
+ - `double` temperature;
+ - `double` feels_like;
+ - `String` weather_name;
+ - `int` pressure;
+ - `int` humidity;
+ - `double` wind_speed;
+ - `double` rain;
+ #### CurrentData
+- `String` location;
+- `int` dt;
+- `List<WeatherModel>` hourly;
+- `List<DailyWeatherModel>` daily;

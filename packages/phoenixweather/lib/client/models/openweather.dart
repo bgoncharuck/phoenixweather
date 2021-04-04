@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../models/latlonapi.dart';
+import 'latlonapi.dart';
 
 class OpenWeatherModel {
   LatLonApiModel location;

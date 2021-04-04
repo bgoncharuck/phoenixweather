@@ -1,5 +1,5 @@
-name: phoenixweather_common
-description: part of program, that can be reused in dart frameworks
+name: phoenixweather
+description: base of app
 author: bgoncharuck
 licence: LGPL v3
 version: 0.1.0+1

@@ -1,15 +1,17 @@
 library phoenixweather_common;
 
 import 'package:meta/meta.dart';
-import 'src/client/latlonapi.dart';
-import 'src/client/weatherapi.dart';
-import 'src/models/latlonapi.dart';
-import 'src/models/openweather.dart';
+import 'client/latlonapi.dart';
+import 'client/weatherapi.dart';
+import 'models/latlonapi.dart';
+import 'models/openweather.dart';
 
-export 'src/client/latlonapi.dart';
-export 'src/client/weatherapi.dart';
-export 'src/models/latlonapi.dart';
-export 'src/models/openweather.dart';
+export 'client/latlonapi.dart';
+export 'client/weatherapi.dart';
+export 'models/latlonapi.dart';
+export 'models/openweather.dart';
+export 'models/weather.dart';
+export 'models/currentdata.dart';
 
 /// see client and create private folder to use your API keys
 LatLonApiClient locationClient = GoogleGeocoding();
