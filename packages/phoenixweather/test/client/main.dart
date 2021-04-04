@@ -2,14 +2,16 @@ import 'dart:convert';
 import 'package:meta/meta.dart';
 import 'package:phoenixweather/client/client.dart';
 
+part 'currentdata/currentdata.dart';
 part 'location/latlonapi_test.dart';
 part 'weather/weatherapi_test.dart';
 
 void main() {
-  testAll();
+  clientTest();
+  currentDataTest();
 }
 
-Future testAll() async {
+Future clientTest() async {
   // location
   final locations = await threeCitiesAndWrongLocationAsJsonList();
   print(locations);
@@ -40,4 +42,32 @@ Future testAll() async {
       OpenWeatherModel.fromJson(jsonTest).location.data ==
           weather.location.data,
       "JSON test failed");
+}
+
+Future currentDataTest() async {
+  await phoenixWeatherModuleTest();
+  String city = "London";
+
+  // WeatherModel test
+  final cityWeatherTomorrow =
+      await weatherModelFromMorningOfFirstDayTest(location: city);
+  if (cityWeatherTomorrow != null)
+    print("Temperature in $city is ${cityWeatherTomorrow.temperature} K");
+
+  // CurrentData test
+  final currentData = await currentDataJsonTests(location: "Одеса");
+  print(currentData.location);
+}
+
+Future phoenixWeatherModuleTest() async {
+  final weatherInParis = await whatIsTheWeatherIn(location: "Paris");
+
+  // handle error
+  if (weatherInParis == null) {
+    if (locationModel != null)
+      // print error
+      print(locationModel.data);
+  } else
+    print(
+        "Temperature in ${locationModel.data} is ${weatherInParis.hourly[0].temp} K");
 }

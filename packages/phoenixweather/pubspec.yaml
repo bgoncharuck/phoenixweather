@@ -3,11 +3,14 @@ description: base of app
 author: bgoncharuck
 licence: LGPL v3
 version: 0.1.0+1
+publish_to: none
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
-  meta: ^1.1.8
-  equatable: ^1.2.5
-  http: ^0.12.1
+  meta: ^1.3.0
+  equatable: ^2.0.0
+  http: ^0.13.1
+  bloc: ^7.0.0
+  rxdart: ^0.26.0
