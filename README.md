@@ -20,5 +20,3 @@ Please, see packages/phoenixweather_flutter_app for developer details.
 - See android [appbundle 0.1.4](https://github.com/bgoncharuck/phoenixweather/releases/tag/0.1.4) in release section
 - [Find it on play market](https://play.google.com/store/apps/details?id=com.bgoncharuck.phoenixweather.phoenixweather_flutter_app)
 
-#### Todo
-- facebook API, when avaible.

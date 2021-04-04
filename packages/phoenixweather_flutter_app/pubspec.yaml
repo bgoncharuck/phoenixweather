@@ -1,0 +1,47 @@
+name: phoenixweather_flutter_app
+description: weather app
+author: bgoncharuck
+homepage: https://github.com/bgoncharuck/phoenixweather
+license: GPL v3
+publish_to: 'none'
+
+version: 0.1.4+5
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  permission_handler: ^6.1.1
+  equatable: ^2.0.0
+  flutter_bloc: ^7.0.0
+  cloud_firestore: ^1.0.3
+  flutter_spinkit: ^5.0.0
+
+  phoenixweather:
+    path: ../phoenixweather
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_launcher_icons: ^0.7.5
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/launcher/icon.png"
+  image_path_android: "assets/launcher/icon.png"
+
+flutter:
+
+
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/launcher/icon.png
+    - assets/weather/
